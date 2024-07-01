@@ -7,9 +7,10 @@ defmodule Defectoscope.Report do
           kind: atom(),
           level: atom(),
           message: String.t(),
-          phoenix_params: map(),
           stacktrace: list(String.t()),
-          timestamp: DateTime.t()
+          timestamp: DateTime.t(),
+          phoenix_params: map(),
+          meta: String.t() | nil
         }
 
   @type params :: %{:builder => atom(), optional(atom()) => any()}
@@ -19,9 +20,10 @@ defmodule Defectoscope.Report do
     :kind,
     :level,
     :message,
-    :phoenix_params,
     :stacktrace,
-    :timestamp
+    :timestamp,
+    phoenix_params: %{},
+    meta: nil
   ]
 
   @doc """
@@ -37,7 +39,6 @@ defmodule Defectoscope.Report do
           kind: :defectoscope_error,
           level: :error,
           message: Exception.format_banner(kind, reason, __STACKTRACE__),
-          phoenix_params: %{},
           stacktrace: __STACKTRACE__,
           timestamp: DateTime.utc_now()
         }

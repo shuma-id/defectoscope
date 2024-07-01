@@ -9,6 +9,7 @@ defmodule Defectoscope.LoggerBackendReportBuilder do
           level: atom(),
           message: String.t(),
           meta: map(),
+          metadata: Keyword.t(),
           timestamp: DateTime.t()
         }
 
@@ -18,12 +19,8 @@ defmodule Defectoscope.LoggerBackendReportBuilder do
   @impl true
   @spec new(params) :: Report.t()
   def new(params) do
-    %{
-      level: level,
-      message: message,
-      meta: meta,
-      timestamp: timestamp
-    } = params
+    %{level: level, message: message, meta: meta, metadata: metadata, timestamp: timestamp} =
+      params
 
     reason = reason_from_meta(meta)
     stacktrace = stacktrace_from_meta(meta)
@@ -31,10 +28,10 @@ defmodule Defectoscope.LoggerBackendReportBuilder do
     %Report{
       kind: format_kind(reason),
       level: level,
-      message: format_message(reason, stacktrace) || message |> IO.iodata_to_binary(),
+      message: (format_message(reason, stacktrace) || message) |> IO.iodata_to_binary(),
       stacktrace: format_stacktrace(stacktrace),
-      phoenix_params: %{},
-      timestamp: timestamp
+      timestamp: timestamp,
+      meta: inspect(metadata)
     }
   end
 

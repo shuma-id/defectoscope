@@ -45,6 +45,7 @@ defmodule Defectoscope.ForwarderTest do
              }, [{:erlang, :/, [1, 0], [error_info: %{module: :erl_erts_errors}]}]},
           erl_level: :error
         },
+        metadata: [user_params: [1, 0]],
         timestamp: ~U[2024-04-23 08:56:19.327874Z]
       }
 

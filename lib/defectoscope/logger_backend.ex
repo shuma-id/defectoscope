@@ -9,6 +9,11 @@ defmodule Defectoscope.LoggerBackend do
 
   @handle_levels ~w(error critical emergency alert)a
 
+  @meta_keys ~w(
+    application erl_level initial_call registered_name function line
+    module pid time file gl domain mfa crash_reason
+  )a
+
   def init(__MODULE__) do
     {:ok, []}
   end
@@ -23,7 +28,8 @@ defmodule Defectoscope.LoggerBackend do
       builder: LoggerBackendReportBuilder,
       level: level,
       message: message,
-      meta: meta |> Enum.into(%{}),
+      meta: Map.new(meta),
+      metadata: Keyword.drop(meta, @meta_keys),
       timestamp: DateTime.utc_now()
     }
     |> ErrorHandler.push()
